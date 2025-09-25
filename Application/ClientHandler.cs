@@ -1,0 +1,71 @@
+﻿using Application.Interfaces;
+using Domain;
+
+namespace Application
+{
+    public class ClientHandler : IClientHandler
+    {
+
+        private readonly IClientRepository _repository; // Port du Domain
+
+        // Injection de dépendances
+        public ClientHandler(IClientRepository repository)
+        {
+            _repository = repository;
+        }
+
+        public int Create(ClientDto clientDto)
+        {
+            Client clt  = Client.Creer(
+                                        clientDto.Nom,
+                                        clientDto.Email,
+                                        clientDto.NumeroSiret
+                                        );
+
+            return _repository.Sauvegarder(clt); 
+
+        }
+
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ClientDto> GetAll()
+        {
+            List<ClientDto> clientDtos = new List<ClientDto>();
+            var lstClient = _repository.GetAll();
+
+            foreach (Client client in lstClient)
+            {
+                clientDtos.Add(MapToDto(client));
+            }
+            return clientDtos;
+        }
+
+        public void Update(int id, ClientDto clientDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        ClientDto IClientHandler.GetById(int id)
+        {
+            var client = _repository.GetById(id);
+            var clientDto = MapToDto(client);
+            return clientDto;
+        }
+
+
+        private ClientDto MapToDto(Client client)
+        {
+            var entity = new ClientDto()
+            {
+                Id = client.Id,
+                Nom = client.Nom,
+                Email = client.Email,
+                NumeroSiret = client.NumeroSiret
+            };
+            return entity;
+        }
+    }
+}
