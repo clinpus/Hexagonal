@@ -39,7 +39,7 @@ namespace Domain
         // 2. FABRIQUE STATIQUE (Méthode de création contrôlée)
         // L'Id n'est pas passé en paramètre car il est géré par la persistance.
         // **********************************
-        public static Client Creer(string nom, string email, string numeroSiret = null)
+        public static Client Creer(int Id, string nom, string email, string numeroSiret = null)
         {
             if (string.IsNullOrWhiteSpace(nom))
                 throw new ArgumentException("Le nom du client est obligatoire.", nameof(nom));
@@ -49,6 +49,7 @@ namespace Domain
 
             // Création avec Id = 0 (en attente de la BDD)
             Client rClient = new Client(nom, email, numeroSiret);
+            rClient.Id = Id;
             return rClient;
         }
 

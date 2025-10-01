@@ -17,6 +17,7 @@ namespace Application
         public int Create(ClientDto clientDto)
         {
             Client clt  = Client.Creer(
+                                        clientDto.Id,
                                         clientDto.Nom,
                                         clientDto.Email,
                                         clientDto.NumeroSiret
@@ -33,13 +34,14 @@ namespace Application
 
         public IEnumerable<ClientDto> GetAll()
         {
-            List<ClientDto> clientDtos = new List<ClientDto>();
             var lstClient = _repository.GetAll();
 
+            List<ClientDto> clientDtos = new List<ClientDto>();
             foreach (Client client in lstClient)
             {
                 clientDtos.Add(MapToDto(client));
             }
+
             return clientDtos;
         }
 

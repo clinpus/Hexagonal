@@ -68,6 +68,7 @@ namespace Persistence
         private Client MapToDomain(ClientEntity ClientEntity)
         {
             Client rClient = Client.Creer(
+                ClientEntity.Id,
                 ClientEntity.Nom,
                 ClientEntity.Email,
                 ClientEntity.NumeroSiret
