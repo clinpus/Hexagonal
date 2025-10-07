@@ -29,7 +29,6 @@ namespace Domain
         // **********************************
         private Client(string nom, string email, string siret)
         {
-            // Id = 0 (valeur par défaut pour les nouveaux objets)
             Nom = nom;
             Email = email;
             NumeroSiret = siret;
