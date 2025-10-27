@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿
 
 namespace Domain
 {
@@ -14,10 +9,13 @@ namespace Domain
         public int Id { get; private set; }
 
         // Autres propriétés comme avant
-        public string Nom { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Adresse{ get; private set; }
+        public string Tel{ get; private set; }
         public string Email { get; private set; }
-        public string NumeroSiret { get; private set; }
-
+        public string NumeroSiret { get; private set; } 
+        public DateTime CreationDate { get; private set; }
         public bool EstProfessionnel => !string.IsNullOrEmpty(NumeroSiret);
 
         private readonly List<Invoice> _Invoices = new();
@@ -27,9 +25,10 @@ namespace Domain
         // 1. CONSTRUCTEUR (Pour l'instanciation de l'entité)
         // L'Id est 0 car il n'est pas encore attribué par la BDD.
         // **********************************
-        private Client(string nom, string email, string siret)
+        private Client(string lastName, string firstName, string email, string siret)
         {
-            Nom = nom;
+            LastName = lastName;
+            FirstName = firstName;
             Email = email;
             NumeroSiret = siret;
         }
@@ -38,16 +37,16 @@ namespace Domain
         // 2. FABRIQUE STATIQUE (Méthode de création contrôlée)
         // L'Id n'est pas passé en paramètre car il est géré par la persistance.
         // **********************************
-        public static Client Creer(int Id, string nom, string email, string numeroSiret = null)
+        public static Client Creer(int Id, string lastName,string firstName, string email, string numeroSiret = null)
         {
-            if (string.IsNullOrWhiteSpace(nom))
-                throw new ArgumentException("Le nom du client est obligatoire.", nameof(nom));
+            if (string.IsNullOrWhiteSpace(lastName))
+                throw new ArgumentException("Le nom du client est obligatoire.", nameof(lastName));
 
             if (string.IsNullOrWhiteSpace(email) || !email.Contains('@'))
                 throw new ArgumentException("L'adresse e-mail n'est pas valide.", nameof(email));
 
             // Création avec Id = 0 (en attente de la BDD)
-            Client rClient = new Client(nom, email, numeroSiret);
+            Client rClient = new Client(lastName, firstName, email, numeroSiret);
             rClient.Id = Id;
             return rClient;
         }
@@ -58,7 +57,8 @@ namespace Domain
         public void MettreAJourCoordonnees(string nouveauNom, string nouvelEmail)
         {
             // Logique de validation et mise à jour...
-            Nom = nouveauNom;
+            LastName = nouveauNom;
+            FirstName = nouveauNom;
             Email = nouvelEmail;
         }
 

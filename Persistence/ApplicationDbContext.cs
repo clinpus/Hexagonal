@@ -1,13 +1,15 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using Persistence.Entity;
 
 namespace Persistence
 {
     public class ApplicationDbContext : DbContext
     {
         public DbSet<InvoiceEntity> Invoices { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
+        //public DbSet<OrderItemEntity> OrderItems { get; set; }
         public DbSet<ClientEntity> Clients { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -23,7 +25,7 @@ namespace Persistence
                 // Définit Id comme Clé Primaire (int)
                 entity.HasKey(c => c.Id);
                 // Exemple : Le nom ne peut pas être null
-                entity.Property(c => c.Nom).IsRequired();
+                entity.Property(c => c.LastName).IsRequired();
 
                 // Relation One-to-Many avec Invoice
                 entity.HasMany(c => c.Invoices)
@@ -50,6 +52,20 @@ namespace Persistence
                 });
             });
 
+            // Configuration pour l'Entité Invoice
+            modelBuilder.Entity<OrderEntity>(entity =>
+            {
+                entity.HasKey(i => i.Id);
+
+                // Configuration de l'Objet Valeur/Entité Dépendante InvoiceLineEntity
+                entity.OwnsMany(i => i.Items, line =>
+                {
+                    // Définit la clé composite : InvoiceId (FK) et Id (numéro de ligne)
+                    line.HasKey(l => new { l.OrderId , l.Id });
+
+                    line.ToTable("OrderItemEntity");
+                });
+            });
         }
     }
 }

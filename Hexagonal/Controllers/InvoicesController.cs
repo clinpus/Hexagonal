@@ -1,10 +1,10 @@
 ﻿using Application;
-using Application.Interfaces;
-using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hexagonal.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class InvoicesController : Controller
@@ -14,10 +14,8 @@ namespace Hexagonal.Controllers
 
         public InvoicesController(IInvoiceHandler invoiceHandler)
         {
-            // Le Handler fait partie de la couche Application
             _invoiceHandler = invoiceHandler;
         }
-
 
         // --------------------------------------
         // C : CREATE (Créer un nouveau invoice)
@@ -34,7 +32,6 @@ namespace Hexagonal.Controllers
             try
             {
                 int newId = _invoiceHandler.Create(invoiceDto);
-                // Retourne un statut 201 avec l'URI du nouvel objet
                 return CreatedAtAction(nameof(GetById), new { id = newId }, invoiceDto);
             }
             catch (Exception ex)
@@ -44,7 +41,7 @@ namespace Hexagonal.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Invoice> GetById(int id)
+        public ActionResult<InvoiceDto> GetById(int id)
         {
             var invoice = _invoiceHandler.GetById(id);
             if (invoice == null)
@@ -66,7 +63,7 @@ namespace Hexagonal.Controllers
         }
 
         [HttpGet("calculTotal")]
-        public ActionResult<Invoice> GetTotalInvoice(int id)
+        public ActionResult<InvoiceDto> GetTotalInvoice(int id)
         {
             int[] prices = { 1, 2, 3 };
              int total = _invoiceHandler.CalculTotal(prices);
@@ -76,7 +73,6 @@ namespace Hexagonal.Controllers
             }
             return Ok(total);
         }
-
 
         // --------------------------------------
         // C : CREATE (Créer un nouveau invoice)
@@ -92,9 +88,7 @@ namespace Hexagonal.Controllers
 
             try
             {
-                //invoiceLineDto.InvoiceId = invoiceId;
                 int newId = _invoiceHandler.AddInvoiceLine(invoiceId, invoiceLineDto);
-                // Retourne un statut 201 avec l'URI du nouvel objet
                 return CreatedAtAction(nameof(GetById), new { id = newId }, invoiceLineDto);
             }
             catch (Exception ex)

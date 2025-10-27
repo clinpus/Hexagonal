@@ -11,15 +11,13 @@ namespace Application
 
         // Obligatoire pour la création/mise à jour
         [Required(ErrorMessage = "Le nom du client est obligatoire.")]
-        public string Nom { get; set; }
-
-        public string Adresse { get; set; }
-
-        public string Email { get; set; }
+        public string FirstName { get;  set; }
+        public string LastName { get; set; }
+        public string Adresse { get;  set; }
+        public string Tel { get;  set; }
+        public string Email { get;  set; }
 
         public string NumeroSiret { get; set; }
-
-        public string Ville { get; set; }
 
         // Optionnel : Ajout d'une propriété pour le lien de l'objet de Domaine
         public int NombreDeFactures { get; set; }

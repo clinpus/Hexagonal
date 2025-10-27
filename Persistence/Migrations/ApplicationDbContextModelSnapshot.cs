@@ -22,7 +22,7 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Persistence.Entity.ClientEntity", b =>
+            modelBuilder.Entity("Persistence.ClientEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,16 +30,23 @@ namespace Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Email")
-                        .IsRequired()
+                    b.Property<string>("Adresse")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nom")
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NumeroSiret")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tel")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -47,7 +54,7 @@ namespace Persistence.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("Persistence.Entity.InvoiceEntity", b =>
+            modelBuilder.Entity("Persistence.InvoiceEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,7 +72,6 @@ namespace Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Etat")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Numero")
@@ -79,15 +85,71 @@ namespace Persistence.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("Persistence.Entity.InvoiceEntity", b =>
+            modelBuilder.Entity("Persistence.OrderEntity", b =>
                 {
-                    b.HasOne("Persistence.Entity.ClientEntity", "Client")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Persistence.UserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Persistence.InvoiceEntity", b =>
+                {
+                    b.HasOne("Persistence.ClientEntity", "Client")
                         .WithMany("Invoices")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("Persistence.Entity.InvoiceLineEntity", "InvoiceLines", b1 =>
+                    b.OwnsMany("Persistence.InvoiceLineEntity", "InvoiceLines", b1 =>
                         {
                             b1.Property<int>("InvoiceId")
                                 .HasColumnType("int");
@@ -135,7 +197,45 @@ namespace Persistence.Migrations
                     b.Navigation("InvoiceLines");
                 });
 
-            modelBuilder.Entity("Persistence.Entity.ClientEntity", b =>
+            modelBuilder.Entity("Persistence.OrderEntity", b =>
+                {
+                    b.OwnsMany("Persistence.OrderItemEntity", "Items", b1 =>
+                        {
+                            b1.Property<int>("OrderId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<decimal>("Price")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.Property<int>("ProductId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("ProductName")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("Quantity")
+                                .HasColumnType("int");
+
+                            b1.HasKey("OrderId", "Id");
+
+                            b1.ToTable("OrderItemEntity", (string)null);
+
+                            b1.WithOwner("Order")
+                                .HasForeignKey("OrderId");
+
+                            b1.Navigation("Order");
+                        });
+
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Persistence.ClientEntity", b =>
                 {
                     b.Navigation("Invoices");
                 });

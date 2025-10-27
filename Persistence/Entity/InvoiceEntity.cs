@@ -1,7 +1,5 @@
 ﻿
-using Domain;
-
-namespace Persistence.Entity
+namespace Persistence
 {
     public class InvoiceEntity
     {

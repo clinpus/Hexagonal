@@ -1,7 +1,6 @@
 ﻿using Domain;
-// Projet: Facturation.Persistence
 
-namespace Persistence.Entity
+namespace Persistence
 {
     public class ClientEntity
     {
@@ -9,7 +8,10 @@ namespace Persistence.Entity
         public int Id { get; set; }
 
         // Propriétés de base
-        public string Nom { get; set; }
+        public string FirstName { get;  set; }
+        public string LastName { get;  set; }
+        public string Adresse { get; set; }
+        public string Tel { get; private set; }
         public string Email { get; set; }
         public string NumeroSiret { get; set; }
 
@@ -23,7 +25,7 @@ namespace Persistence.Entity
             return new ClientEntity
             {
                 Id = client.Id, // Si le client existe déjà dans la BDD
-                Nom = client.Nom,
+                LastName = client.LastName,
                 Email = client.Email,
                 NumeroSiret = client.NumeroSiret
             };

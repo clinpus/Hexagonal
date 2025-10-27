@@ -6,29 +6,39 @@ namespace Hexagonal.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CustmersController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IClientHandler _clientHandler;
 
-        public CustmersController(IClientHandler clientHandler)
+
+        private readonly IUserHandler _userHandler;
+
+        // Injectez votre UserRepository ou votre DbContext ici
+
+        public UserController(IUserHandler userHandler)
         {
-            _clientHandler = clientHandler;
+            _userHandler = userHandler;
         }
 
 
+        // -------------------
+        // C : CREATE (Créer un nouveau user)
+        // -------------------
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post([FromBody] ClientDto clientDto)
+        public IActionResult Post([FromBody] UserDto userDto)
         {
+            // Validation basique (la validation métier est dans la couche Domain)
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
             try
             {
-                int newId = _clientHandler.Create(clientDto);
-                return CreatedAtAction(nameof(GetById), new { id = newId }, clientDto);
+                int newId = _userHandler.Create(userDto);
+                // Retourne un statut 201 avec l'URI du nouvel objet
+                return CreatedAtAction(nameof(GetById), new { id = newId }, userDto);
             }
             catch (Exception ex)
             {
@@ -36,53 +46,59 @@ namespace Hexagonal.Controllers
             }
         }
 
+        // -------------------
+        // R : READ (Lire un user spécifique)
+        // -------------------
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
         {
-            var client = _clientHandler.GetById(id);
-            if (client == null)
+            var user = _userHandler.GetById(id);
+
+            if (user == null)
             {
-                return NotFound(new { message = $"Client avec ID {id} non trouvé." });
+                return NotFound(new { message = $"User avec ID {id} non trouvé." });
             }
-            return Ok(client);
+
+            return Ok(user);
         }
 
         // -------------------
-        // R : READ (Lire tous les clients)
+        // R : READ (Lire tous les users)
         // -------------------
         [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetAll()
         {
-            var clients = _clientHandler.GetAll();
-            return Ok(clients);
+            var users = _userHandler.GetAll();
+            return Ok(users);
         }
 
         // -------------------
-        // U : UPDATE (Mettre à jour un client existant)
+        // U : UPDATE (Mettre à jour un user existant)
         // -------------------
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Put(int id, [FromBody] ClientDto clientDto)
+        public IActionResult Put(int id, [FromBody] UserDto userDto)
         {
-            if (id != clientDto.Id)
+            if (id != userDto.Id)
             {
                 return BadRequest(new { message = "L'ID de l'URL ne correspond pas à l'ID de l'objet." });
             }
 
             try
             {
-                _clientHandler.Update(id, clientDto);
+                _userHandler.Update(id, userDto);
+                // Statut 204 indique un succès sans corps de réponse
                 return NoContent();
             }
             catch (InvalidOperationException)
             {
-                return NotFound(new { message = $"Client avec ID {id} non trouvé pour la mise à jour." });
+                return NotFound(new { message = $"User avec ID {id} non trouvé pour la mise à jour." });
             }
             catch (Exception ex)
             {
@@ -91,7 +107,7 @@ namespace Hexagonal.Controllers
         }
 
         // -------------------
-        // D : DELETE (Supprimer un client)
+        // D : DELETE (Supprimer un user)
         // -------------------
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -100,15 +116,16 @@ namespace Hexagonal.Controllers
         {
             try
             {
-                _clientHandler.Delete(id);
+                _userHandler.Delete(id);
                 return NoContent();
             }
             catch (InvalidOperationException)
             {
-                return NotFound(new { message = $"Client avec ID {id} non trouvé pour la suppression." });
+                return NotFound(new { message = $"User avec ID {id} non trouvé pour la suppression." });
             }
             catch (Exception ex)
             {
+                // Peut-être une erreur de clé étrangère (user a des factures)
                 return BadRequest(new { message = ex.Message });
             }
         }

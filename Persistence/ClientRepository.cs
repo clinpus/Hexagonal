@@ -1,11 +1,5 @@
 ﻿using Domain;
-using Microsoft.EntityFrameworkCore;
-using Persistence.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Persistence
 {
@@ -58,7 +52,7 @@ namespace Persistence
             var entity = new ClientEntity()
             {
                 Id = Client.Id,
-                Nom = Client.Nom,
+                LastName = Client.LastName,
                 Email = Client.Email,
                 NumeroSiret = Client.NumeroSiret
             };
@@ -69,7 +63,8 @@ namespace Persistence
         {
             Client rClient = Client.Creer(
                 ClientEntity.Id,
-                ClientEntity.Nom,
+                ClientEntity.LastName,
+                ClientEntity.FirstName,
                 ClientEntity.Email,
                 ClientEntity.NumeroSiret
             );

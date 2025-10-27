@@ -1,7 +1,6 @@
 ﻿
 using Domain;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Entity;
 
 namespace Persistence
 {
@@ -110,6 +109,7 @@ namespace Persistence
             var entity = new InvoiceLineEntity() {
                 Description = invoiceLine.Description,
                 Quantity = invoiceLine.Quantity,
+                UnitPrice = invoiceLine.UnitPrice,
                 VatRate = invoiceLine.VatRate,
                 VatAmount = invoiceLine.VatAmount,
                 TotalTTC = invoiceLine.TotalTTC,

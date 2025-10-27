@@ -1,5 +1,4 @@
 ﻿using Domain;
-using Persistence.Entity;
 
 namespace Application
 {
@@ -7,7 +6,6 @@ namespace Application
     {
         private readonly IInvoiceRepository _repository; // Port du Domain
 
-        // Injection de dépendances
         public InvoiceHandler(IInvoiceRepository repository)
         {
             _repository = repository;
@@ -52,11 +50,8 @@ namespace Application
             var newLine = DtoToDomain(dto);
             var invoice = _repository.GetById(invoiceId);
             if (invoice == null) throw new InvalidOperationException("Facture non trouvée.");
-
             invoice.AddLine(newLine);
-
             _repository.Update(invoice);
-
             return newLine.Id;
         }
 
@@ -94,20 +89,16 @@ namespace Application
                 Quantity = invoiceLine.Quantity,
                 VatRate = invoiceLine.VatRate
             };
-
-
             return entity;
         }
 
         private Invoice DtoToDomain(InvoiceDto invoiceDto)
         {
             var lstInvoiceLine = new List<InvoiceLine>();
-
             foreach (InvoiceLineDto invoiceLineDto in invoiceDto.InvoiceLines)
             {
                 lstInvoiceLine.Add(DtoToDomain(invoiceLineDto));
             }
-
             var invoice = Invoice.Reconstruire(
                                                 invoiceDto.Id,
                                                 invoiceDto.ClientId,
@@ -118,7 +109,6 @@ namespace Application
                                                 lstInvoiceLine
                                                );
             return invoice;
-
         }
 
         private InvoiceLine DtoToDomain(InvoiceLineDto invoiceLineDto)

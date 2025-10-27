@@ -1,5 +1,4 @@
-﻿using Application.Interfaces;
-using Domain;
+﻿using Domain;
 
 namespace Application
 {
@@ -18,7 +17,8 @@ namespace Application
         {
             Client clt  = Client.Creer(
                                         clientDto.Id,
-                                        clientDto.Nom,
+                                        clientDto.LastName,
+                                        clientDto.FirstName,
                                         clientDto.Email,
                                         clientDto.NumeroSiret
                                         );
@@ -63,7 +63,8 @@ namespace Application
             var entity = new ClientDto()
             {
                 Id = client.Id,
-                Nom = client.Nom,
+                LastName = client.LastName,
+                FirstName = client.FirstName,
                 Email = client.Email,
                 NumeroSiret = client.NumeroSiret
             };
