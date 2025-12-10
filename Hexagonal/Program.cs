@@ -62,8 +62,8 @@ builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserHandler, UserHandler>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IInvoiceHandler, InvoiceHandler>();
-builder.Services.AddTransient<IClientRepository, ClientRepository>();
-builder.Services.AddTransient<IClientHandler, ClientHandler>();
+builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
+builder.Services.AddTransient<ICustomerHandler, CustomerHandler>();
 
 // Ajout des services pour le générateur Swagger
 builder.Services.AddEndpointsApiExplorer();

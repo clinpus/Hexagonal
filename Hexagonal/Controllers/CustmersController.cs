@@ -6,11 +6,11 @@ namespace Hexagonal.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CustmersController : ControllerBase
+    public class CustomersController : ControllerBase
     {
-        private readonly IClientHandler _clientHandler;
+        private readonly ICustomerHandler _clientHandler;
 
-        public CustmersController(IClientHandler clientHandler)
+        public CustomersController(ICustomerHandler clientHandler)
         {
             _clientHandler = clientHandler;
         }
@@ -19,7 +19,7 @@ namespace Hexagonal.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post([FromBody] ClientDto clientDto)
+        public IActionResult Post([FromBody] CustomerDto clientDto)
         {
             if (!ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace Hexagonal.Controllers
             var client = _clientHandler.GetById(id);
             if (client == null)
             {
-                return NotFound(new { message = $"Client avec ID {id} non trouvé." });
+                return NotFound(new { message = $"Customer avec ID {id} non trouvé." });
             }
             return Ok(client);
         }
@@ -68,7 +68,7 @@ namespace Hexagonal.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Put(int id, [FromBody] ClientDto clientDto)
+        public IActionResult Put(int id, [FromBody] CustomerDto clientDto)
         {
             if (id != clientDto.Id)
             {
@@ -82,7 +82,7 @@ namespace Hexagonal.Controllers
             }
             catch (InvalidOperationException)
             {
-                return NotFound(new { message = $"Client avec ID {id} non trouvé pour la mise à jour." });
+                return NotFound(new { message = $"Customer avec ID {id} non trouvé pour la mise à jour." });
             }
             catch (Exception ex)
             {
@@ -105,7 +105,7 @@ namespace Hexagonal.Controllers
             }
             catch (InvalidOperationException)
             {
-                return NotFound(new { message = $"Client avec ID {id} non trouvé pour la suppression." });
+                return NotFound(new { message = $"Customer avec ID {id} non trouvé pour la suppression." });
             }
             catch (Exception ex)
             {

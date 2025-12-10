@@ -1,5 +1,7 @@
 ﻿
+using Domain;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Entity;
 
 namespace Persistence
 {
@@ -7,8 +9,7 @@ namespace Persistence
     {
         public DbSet<InvoiceEntity> Invoices { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
-        //public DbSet<OrderItemEntity> OrderItems { get; set; }
-        public DbSet<ClientEntity> Clients { get; set; }
+        public DbSet<CustomerEntity> Customers { get; set; }
         public DbSet<UserEntity> Users { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -19,53 +20,21 @@ namespace Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configuration pour l'Entité Client
-            modelBuilder.Entity<ClientEntity>(entity =>
-            {
-                // Définit Id comme Clé Primaire (int)
-                entity.HasKey(c => c.Id);
-                // Exemple : Le nom ne peut pas être null
-                entity.Property(c => c.LastName).IsRequired();
+            // 1. Configurer les noms de tables sans le suffixe "Entity"
+            modelBuilder.Entity<ProductEntity>().ToTable("Product");
+            modelBuilder.Entity<OrderItemEntity>().ToTable("OrderItem"); // <-- DÉCOMMENTÉ/CORRIGÉ
 
-                // Relation One-to-Many avec Invoice
-                entity.HasMany(c => c.Invoices)
-                      .WithOne(i => i.Client)
-                      .HasForeignKey(i => i.ClientId);
-            });
+            // 2. Configurer la relation Product <-> OrderItem (Votre configuration existante)
+            modelBuilder.Entity<ProductEntity>()
+                .HasMany(p => p.OrderItems)
+                .WithOne(oi => oi.Product)
+                .HasForeignKey(oi => oi.ProductEntityId);
 
-            // Configuration pour l'Entité Invoice
-            modelBuilder.Entity<InvoiceEntity>(entity =>
-            {
-                entity.HasKey(i => i.Id);
-                entity.Property(i => i.Numero).IsRequired();
-
-                // Configuration de l'Objet Valeur/Entité Dépendante InvoiceLineEntity
-                entity.OwnsMany(i => i.InvoiceLines, line =>
-                {
-                    // Définit la clé composite : InvoiceId (FK) et Id (numéro de ligne)
-                    line.HasKey(l => new { l.InvoiceId, l.Id });
-
-                    line.ToTable("InvoiceLines");
-
-                    // Mappage des propriétés de la ligne
-                    line.Property(l => l.Description).IsRequired();
-                });
-            });
-
-            // Configuration pour l'Entité Invoice
-            modelBuilder.Entity<OrderEntity>(entity =>
-            {
-                entity.HasKey(i => i.Id);
-
-                // Configuration de l'Objet Valeur/Entité Dépendante InvoiceLineEntity
-                entity.OwnsMany(i => i.Items, line =>
-                {
-                    // Définit la clé composite : InvoiceId (FK) et Id (numéro de ligne)
-                    line.HasKey(l => new { l.OrderId , l.Id });
-
-                    line.ToTable("OrderItemEntity");
-                });
-            });
+            // 3. Configurer la relation Order <-> OrderItem (NOUVELLE CONF.)
+            modelBuilder.Entity<OrderEntity>()
+                .HasMany(o => o.Items) // Assumant que 'Items' est la collection dans OrderEntity
+                .WithOne(oi => oi.Order) // Navigation prop dans OrderItemEntity
+                .HasForeignKey(oi => oi.OrderId); // Clé étrangère dans OrderItemEntity
         }
     }
 }

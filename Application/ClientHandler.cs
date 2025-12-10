@@ -2,20 +2,20 @@
 
 namespace Application
 {
-    public class ClientHandler : IClientHandler
+    public class CustomerHandler : ICustomerHandler
     {
 
-        private readonly IClientRepository _repository; // Port du Domain
+        private readonly ICustomerRepository _repository; // Port du Domain
 
         // Injection de dépendances
-        public ClientHandler(IClientRepository repository)
+        public CustomerHandler(ICustomerRepository repository)
         {
             _repository = repository;
         }
 
-        public int Create(ClientDto clientDto)
+        public int Create(CustomerDto clientDto)
         {
-            Client clt  = Client.Creer(
+            Customer clt  = Customer.Creer(
                                         clientDto.Id,
                                         clientDto.LastName,
                                         clientDto.FirstName,
@@ -32,12 +32,12 @@ namespace Application
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ClientDto> GetAll()
+        public IEnumerable<CustomerDto> GetAll()
         {
-            var lstClient = _repository.GetAll();
+            var lstCustomer = _repository.GetAll();
 
-            List<ClientDto> clientDtos = new List<ClientDto>();
-            foreach (Client client in lstClient)
+            List<CustomerDto> clientDtos = new List<CustomerDto>();
+            foreach (Customer client in lstCustomer)
             {
                 clientDtos.Add(MapToDto(client));
             }
@@ -45,12 +45,12 @@ namespace Application
             return clientDtos;
         }
 
-        public void Update(int id, ClientDto clientDto)
+        public void Update(int id, CustomerDto clientDto)
         {
             throw new NotImplementedException();
         }
 
-        ClientDto IClientHandler.GetById(int id)
+        CustomerDto ICustomerHandler.GetById(int id)
         {
             var client = _repository.GetById(id);
             var clientDto = MapToDto(client);
@@ -58,9 +58,9 @@ namespace Application
         }
 
 
-        private ClientDto MapToDto(Client client)
+        private CustomerDto MapToDto(Customer client)
         {
-            var entity = new ClientDto()
+            var entity = new CustomerDto()
             {
                 Id = client.Id,
                 LastName = client.LastName,

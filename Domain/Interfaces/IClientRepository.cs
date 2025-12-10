@@ -2,11 +2,11 @@
 
 namespace Domain
 {
-    public interface IClientRepository
+    public interface ICustomerRepository
     {
         // Ajout de la méthode de lecture (Port Sortant)
-        Client GetById(int id);
-        IEnumerable<Client> GetAll();
-        int Sauvegarder(Client invoice);
+        Customer GetById(int id);
+        IEnumerable<Customer> GetAll();
+        int Sauvegarder(Customer invoice);
     }
 }

@@ -3,7 +3,7 @@
 namespace Domain
 {
 
-    public class Client
+    public class Customer
     {
         // L'Id est de type int et le 'private set' permet à EF Core de l'initialiser.
         public int Id { get; private set; }
@@ -25,7 +25,7 @@ namespace Domain
         // 1. CONSTRUCTEUR (Pour l'instanciation de l'entité)
         // L'Id est 0 car il n'est pas encore attribué par la BDD.
         // **********************************
-        private Client(string lastName, string firstName, string email, string siret)
+        private Customer(string lastName, string firstName, string email, string siret)
         {
             LastName = lastName;
             FirstName = firstName;
@@ -37,7 +37,7 @@ namespace Domain
         // 2. FABRIQUE STATIQUE (Méthode de création contrôlée)
         // L'Id n'est pas passé en paramètre car il est géré par la persistance.
         // **********************************
-        public static Client Creer(int Id, string lastName,string firstName, string email, string numeroSiret = null)
+        public static Customer Creer(int Id, string lastName,string firstName, string email, string numeroSiret = null)
         {
             if (string.IsNullOrWhiteSpace(lastName))
                 throw new ArgumentException("Le nom du client est obligatoire.", nameof(lastName));
@@ -46,9 +46,9 @@ namespace Domain
                 throw new ArgumentException("L'adresse e-mail n'est pas valide.", nameof(email));
 
             // Création avec Id = 0 (en attente de la BDD)
-            Client rClient = new Client(lastName, firstName, email, numeroSiret);
-            rClient.Id = Id;
-            return rClient;
+            Customer rCustomer = new Customer(lastName, firstName, email, numeroSiret);
+            rCustomer.Id = Id;
+            return rCustomer;
         }
 
         // **********************************

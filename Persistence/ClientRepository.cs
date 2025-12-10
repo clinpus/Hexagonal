@@ -3,42 +3,42 @@
 
 namespace Persistence
 {
-    public class ClientRepository : IClientRepository
+    public class CustomerRepository : ICustomerRepository
     {
 
         private readonly ApplicationDbContext _context;
 
-        public ClientRepository(ApplicationDbContext context)
+        public CustomerRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
 
-        public Client GetById(int id)
+        public Customer GetById(int id)
         {
-            return MapToDomain(_context.Clients.Where(x => x.Id == id).FirstOrDefault());
+            return MapToDomain(_context.Customers.Where(x => x.Id == id).FirstOrDefault());
         }
 
-        public int  Sauvegarder(Client client)
+        public int  Sauvegarder(Customer client)
         {
             var entity = MapToEntity(client);
 
-            _context.Clients.Add(entity);
+            _context.Customers.Add(entity);
             _context.SaveChanges();
 
             return entity.Id;
         }
 
-        public IEnumerable<Client> GetAll()
+        public IEnumerable<Customer> GetAll()
         {
-            var entitys = _context.Clients;
+            var entitys = _context.Customers;
 
             if (entitys == null)
             {
                 return null; // Retourne null si l'entité n'existe pas en BDD
             }
 
-            List<Client> lstInvocies = new List<Client>();
+            List<Customer> lstInvocies = new List<Customer>();
             foreach (var entity in entitys)
             {
                 lstInvocies.Add(MapToDomain(entity));
@@ -46,30 +46,30 @@ namespace Persistence
             return lstInvocies;
         }
 
-        private ClientEntity MapToEntity(Client Client)
+        private CustomerEntity MapToEntity(Customer Customer)
         {
 
-            var entity = new ClientEntity()
+            var entity = new CustomerEntity()
             {
-                Id = Client.Id,
-                LastName = Client.LastName,
-                Email = Client.Email,
-                NumeroSiret = Client.NumeroSiret
+                Id = Customer.Id,
+                LastName = Customer.LastName,
+                Email = Customer.Email,
+                NumeroSiret = Customer.NumeroSiret
             };
             return entity;
         }
 
-        private Client MapToDomain(ClientEntity ClientEntity)
+        private Customer MapToDomain(CustomerEntity CustomerEntity)
         {
-            Client rClient = Client.Creer(
-                ClientEntity.Id,
-                ClientEntity.LastName,
-                ClientEntity.FirstName,
-                ClientEntity.Email,
-                ClientEntity.NumeroSiret
+            Customer rCustomer = Customer.Creer(
+                CustomerEntity.Id,
+                CustomerEntity.LastName,
+                CustomerEntity.FirstName,
+                CustomerEntity.Email,
+                CustomerEntity.NumeroSiret
             );
 
-             return rClient;
+             return rCustomer;
         }
     }
 }

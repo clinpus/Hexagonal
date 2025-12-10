@@ -22,7 +22,7 @@ namespace Domain
             }
 
             // Règle 2 : Vérification du client (si client pro)
-            if (invoice.Client.EstProfessionnel && string.IsNullOrEmpty(invoice.Client.NumeroSiret))
+            if (invoice.Customer.EstProfessionnel && string.IsNullOrEmpty(invoice.Customer.NumeroSiret))
             {
                 erreurs.Add("Un client professionnel doit avoir un numéro SIRET valide.");
             }

@@ -12,7 +12,7 @@ namespace Application
         public DateTime DateEmission { get; set; }
         public DateTime DateEcheance { get; set; }
         public string Etat { get; set; }
-        public int ClientId { get; set; }
+        public int CustomerId { get; set; }
         public IEnumerable<InvoiceLineDto> InvoiceLines { get; set; }
     }
 }

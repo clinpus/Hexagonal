@@ -15,13 +15,22 @@ namespace Persistence
         // Propriétés de l'Entité (Identité Unique)
         public int Id { get; set; }
 
-        // Relation avec Customer (Référence par ID, bonne pratique DDD)
-        public int CustomerId { get; private set; }
-
         // Propriétés de l'Agrégat
         public DateTime OrderDate { get; private set; }
         public OrderStatus Status { get; private set; }
         public decimal TotalPrice { get; private set; }
+
+
+        // *** 3. CLÉ ÉTRANGÈRE ***
+        // Clé étrangère vers l'entité CustomerEntity
+        public int CustomerId { get; set; }
+
+        // *** 4. PROPRIÉTÉ DE NAVIGATION (Relations) ***
+
+        // Relation One-to-Many : Une Invoice appartient à un Customer
+        // EF Core la remplit lors du chargement
+        public CustomerEntity Customer { get; set; }
+
 
         // Relation One-to-Many : Une Invoice a plusieurs Lignes
         // ICollection est le type standard pour les collections de navigation dans EF Core

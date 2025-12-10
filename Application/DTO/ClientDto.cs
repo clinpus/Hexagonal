@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application
 {
-    public class ClientDto
+    public class CustomerDto
     {
         // Pour l'UPDATE et le GET (peut être null ou 0 pour le CREATE)
         public int Id { get; set; }

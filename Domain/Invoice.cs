@@ -5,8 +5,8 @@ namespace Domain
     public class Invoice
     {
         public int Id { get; set; } 
-        public int ClientId { get;  set; }
-        public Client Client { get;  set; }
+        public int CustomerId { get;  set; }
+        public Customer Customer { get;  set; }
 
         // *** Données de Facture ***
         public string Numero { get; private set; }
@@ -26,7 +26,7 @@ namespace Domain
 
         internal Invoice(   
                             int     Id, 
-                            int     ClientId, 
+                            int     CustomerId, 
                             string  Numero,
                             string  etatLu,
                             DateTime DateEmission,
@@ -34,7 +34,7 @@ namespace Domain
                             List<InvoiceLine> InvoiceLinesList)
         {
             this.Id = Id;
-            this.ClientId = ClientId;
+            this.CustomerId = CustomerId;
             this.Numero = Numero;
             this.Etat = etatLu;
             this.DateEmission = DateEmission;
@@ -47,7 +47,7 @@ namespace Domain
         // -----------------------------------------------------------------
         public static Invoice Reconstruire(
             int Id,
-            int ClientId,
+            int CustomerId,
             string Numero,
             string Etat,
             DateTime DateEmission,
@@ -55,7 +55,7 @@ namespace Domain
             List<InvoiceLine> InvoiceLinesList
         )
         {
-            var invoice = new Invoice( Id, ClientId, Numero, Etat, DateEmission, DateEcheance, InvoiceLinesList);
+            var invoice = new Invoice( Id, CustomerId, Numero, Etat, DateEmission, DateEcheance, InvoiceLinesList);
             return invoice;
         }
 

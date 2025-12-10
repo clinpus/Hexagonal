@@ -68,7 +68,7 @@ namespace Application
             var entity = new InvoiceDto()
             {
                 Id          = invoice.Id,
-                ClientId    = invoice.ClientId,
+                CustomerId    = invoice.CustomerId,
                 Etat        = invoice.Etat,
                 Numero      = invoice.Numero,
                 DateEcheance = invoice.DateEcheance,
@@ -101,7 +101,7 @@ namespace Application
             }
             var invoice = Invoice.Reconstruire(
                                                 invoiceDto.Id,
-                                                invoiceDto.ClientId,
+                                                invoiceDto.CustomerId,
                                                 invoiceDto.Numero,
                                                 invoiceDto.Etat,
                                                 invoiceDto.DateEmission,

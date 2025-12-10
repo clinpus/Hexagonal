@@ -1,4 +1,6 @@
 ﻿
+using Persistence.Entity;
+
 namespace Persistence
 {
     public class OrderItemEntity
@@ -7,12 +9,13 @@ namespace Persistence
 
         public int Id { get;  set; }
         
-        public int ProductId { get; private set; }
-        public string ProductName { get; private set; }
+        public int ProductEntityId { get;  set; }
         public decimal Price { get; private set; }
         public int Quantity { get; private set; }
 
         public OrderEntity Order { get; set; }
+
+        public ProductEntity Product { get; private set; }
 
     }
     

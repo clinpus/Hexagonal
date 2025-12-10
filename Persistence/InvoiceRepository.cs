@@ -94,7 +94,7 @@ namespace Persistence
 
             var entity = new InvoiceEntity() { 
                 Id  = invoice.Id,
-                ClientId = invoice.ClientId,
+                CustomerId = invoice.CustomerId,
                 Etat = invoice.Etat,
                 Numero = invoice.Numero,
                 DateEcheance = invoice.DateEcheance,
@@ -130,7 +130,7 @@ namespace Persistence
 
             var invoice = Invoice.Reconstruire(
                                                 invoiceEntity.Id,
-                                                invoiceEntity.ClientId,
+                                                invoiceEntity.CustomerId,
                                                 invoiceEntity.Numero,
                                                 invoiceEntity.Etat,
                                                 invoiceEntity.DateEmission,

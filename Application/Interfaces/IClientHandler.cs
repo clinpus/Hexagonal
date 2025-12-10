@@ -2,15 +2,15 @@
 
 namespace Application
 {
-    public interface IClientHandler
+    public interface ICustomerHandler
     {
         // C
-        int Create(ClientDto clientDto);
+        int Create(CustomerDto clientDto);
         // R
-        ClientDto GetById(int id);
-        IEnumerable<ClientDto> GetAll();
+        CustomerDto GetById(int id);
+        IEnumerable<CustomerDto> GetAll();
         // U
-        void Update(int id, ClientDto clientDto);
+        void Update(int id, CustomerDto clientDto);
         // D
         void Delete(int id);
     }

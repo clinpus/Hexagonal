@@ -13,14 +13,14 @@ namespace Persistence
         public string Etat { get; set; }
 
         // *** 3. CLÉ ÉTRANGÈRE ***
-        // Clé étrangère vers l'entité ClientEntity
-        public int ClientId { get; set; }
+        // Clé étrangère vers l'entité CustomerEntity
+        public int CustomerId { get; set; }
 
         // *** 4. PROPRIÉTÉ DE NAVIGATION (Relations) ***
 
-        // Relation One-to-Many : Une Invoice appartient à un Client
+        // Relation One-to-Many : Une Invoice appartient à un Customer
         // EF Core la remplit lors du chargement
-        public ClientEntity Client { get; set; }
+        public CustomerEntity Customer { get; set; }
 
         // Relation One-to-Many : Une Invoice a plusieurs Lignes
         // ICollection est le type standard pour les collections de navigation dans EF Core
