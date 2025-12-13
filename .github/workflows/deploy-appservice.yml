@@ -1,36 +1,40 @@
-name: Build API Artifact Only
+name: Deploy .NET API to App Service
 
 on:
   push:
     branches:
-      - main
+      - main # Assurez-vous que c'est la branche où vous poussez le code API
     paths:
-      - 'HexagonalAPI/**' # Déclenche seulement si le code API change
+      - 'HexagonalAPI/**' # Se déclenche uniquement si l'API change
 
 jobs:
-  build-and-upload:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    name: Build .NET API and Deploy
+
     steps:
       - uses: actions/checkout@v3
-        # L'API se trouve à la racine du workspace dans ce repo
         
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.x' # Vérifiez votre version
+          dotnet-version: '8.x' # Vérifiez cette version
           
-      - name: Restore dependencies
-        run: dotnet restore
-        working-directory: HexagonalAPI # Votre dossier API
-        
+      # 1. Publier l'API
       - name: Publish API
-        run: dotnet publish --no-restore -c Release -o publish
-        working-directory: HexagonalAPI
+        # L'action publish crée un dossier de sortie prêt à être déployé
+        run: dotnet publish HexagonalAPI -c Release --output publish_output
+        # Ajustez 'HexagonalAPI' si le nom de votre fichier .csproj ou dossier projet est différent
         
-      # Upload de l'artefact
-      - name: Upload API Artifact for Deployment
-        uses: actions/upload-artifact@v4 
+      # 2. Déployer sur Azure App Service
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
         with:
-          name: api-backend-for-swa # NOM CLÉ pour le téléchargement
-          # Le chemin vers le dossier 'publish' qui est l'artefact
-          path: HexagonalAPI/publish
+          # Utilise le JSON du Principal de Service stocké dans le Secret
+          creds: ${{ secrets.AZURE_CREDENTIALS }} 
+          
+          # Le nom de l'App Service
+          app-name: 'Hexagon'
+          
+          # Le chemin vers le code publié
+          package: '${{ github.workspace }}/publish_output'
