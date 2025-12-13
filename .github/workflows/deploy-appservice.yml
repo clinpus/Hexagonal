@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'HexagonalAPI/**' # Déclenche seulement si le code API change
 
 jobs:
   build-and-upload:
