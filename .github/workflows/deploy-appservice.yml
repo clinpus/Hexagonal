@@ -3,7 +3,7 @@ name: Deploy .NET API to App Service
 on:
   push:
     branches:
-      - main # Assurez-vous que c'est la branche où vous poussez le code API
+      - master # Assurez-vous que c'est la branche où vous poussez le code API
     paths:
       - 'HexagonalAPI/**' # Se déclenche uniquement si l'API change
 
