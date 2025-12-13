@@ -3,10 +3,10 @@ name: Deploy .NET API to App Service
 on:
   push:
     branches:
-      - master # Correct : Branche master
-    paths:
-      - 'Hexagonal/**' # Correct : Se déclenche si le dossier Hexagonal change
-
+      - master # Se lance uniquement pour les pushes sur master
+    # paths:
+    #   - 'Hexagonal/**' # <--- CECI EST SUPPRIMÉ
+    
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -15,20 +15,31 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         
+      # 1. Configuration de l'environnement .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.x' # Vérifiez votre version .NET
+          dotnet-version: '8.x' 
           
-      # 1. Publier l'API
+      # 2. CONNEXION AZURE
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      # 3. Publier l'API
       - name: Publish API
         run: dotnet publish Hexagonal -c Release --output publish_output
-        # Correct : Publie le projet nommé 'Hexagonal'
         
-      # 2. Déployer sur Azure App Service
+      # 4. Déploiement sur Azure App Service
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }} 
-          app-name: 'Hexagon' # Nom de votre App Service sur Azure
+          app-name: 'Hexagon' 
           package: '${{ github.workspace }}/publish_output'
+          
+      # 5. Déconnexion Azure (Bonne pratique)
+      - name: Logout from Azure
+        run: |
+          az logout
+        if: always()
