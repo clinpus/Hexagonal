@@ -18,7 +18,7 @@ namespace Persistence
 
             // 2. Construire les DbContextOptions
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            var connectionString = configuration.GetConnectionString("HexgonalConnection");
+            var connectionString = configuration.GetConnectionString("HexagonalConnection");
 
             // 🚨 Utilisez la méthode d'extension du provider
             builder.UseSqlServer(connectionString);
