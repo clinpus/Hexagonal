@@ -134,9 +134,11 @@ app.UseAuthorization();
 if (app.Environment.IsDevelopment())
 {
     // Ajout du middleware Swagger et SwaggerUI
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseMiddleware<ExceptionMiddleware>();
 

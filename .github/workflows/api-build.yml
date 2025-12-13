@@ -1,0 +1,36 @@
+name: Build API Artifact Only
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'HexagonalAPI/**' # Déclenche seulement si le code API change
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        # L'API se trouve à la racine du workspace dans ce repo
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x' # Vérifiez votre version
+          
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: HexagonalAPI # Votre dossier API
+        
+      - name: Publish API
+        run: dotnet publish --no-restore -c Release -o publish
+        working-directory: HexagonalAPI
+        
+      # Upload de l'artefact
+      - name: Upload API Artifact for Deployment
+        uses: actions/upload-artifact@v4 
+        with:
+          name: api-backend-for-swa # NOM CLÉ pour le téléchargement
+          # Le chemin vers le dossier 'publish' qui est l'artefact
+          path: HexagonalAPI/publish
