@@ -3,9 +3,9 @@ name: Deploy .NET API to App Service
 on:
   push:
     branches:
-      - main # Assurez-vous que c'est la branche où vous poussez le code API
+      - master # Correct : Branche master
     paths:
-      - 'HexagonalAPI/**' # Se déclenche uniquement si l'API change
+      - 'Hexagonal/**' # Correct : Se déclenche si le dossier Hexagonal change
 
 jobs:
   build-and-deploy:
@@ -18,23 +18,17 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.x' # Vérifiez cette version
+          dotnet-version: '8.x' # Vérifiez votre version .NET
           
       # 1. Publier l'API
       - name: Publish API
-        # L'action publish crée un dossier de sortie prêt à être déployé
-        run: dotnet publish HexagonalAPI -c Release --output publish_output
-        # Ajustez 'HexagonalAPI' si le nom de votre fichier .csproj ou dossier projet est différent
+        run: dotnet publish Hexagonal -c Release --output publish_output
+        # Correct : Publie le projet nommé 'Hexagonal'
         
       # 2. Déployer sur Azure App Service
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
-          # Utilise le JSON du Principal de Service stocké dans le Secret
           creds: ${{ secrets.AZURE_CREDENTIALS }} 
-          
-          # Le nom de l'App Service
-          app-name: 'Hexagon'
-          
-          # Le chemin vers le code publié
+          app-name: 'Hexagon' # Nom de votre App Service sur Azure
           package: '${{ github.workspace }}/publish_output'
