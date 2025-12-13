@@ -48,7 +48,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllers();
 
 // Récupération de la chaîne de connexion
-var connectionString = builder.Configuration.GetConnectionString("HexgonalConnection");
+var connectionString = builder.Configuration.GetConnectionString("HexagonalConnection");
 
 // Enregistrement de votre DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
