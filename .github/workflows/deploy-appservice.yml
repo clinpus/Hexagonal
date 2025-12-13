@@ -1,39 +1,41 @@
-name: Build API Artifact Only
+name: Deploy API to Azure
 
 on:
   push:
     branches:
-      - main
+      - main  # Déclenche le workflow à chaque push sur la branche 'main'
+
+env:
+  AZURE_WEBAPP_NAME: srv-hexagon-prod    # Nom de votre Azure App Service
+  AZURE_WEBAPP_PACKAGE_PATH: './Backend/publish' # Chemin où sont publiés les fichiers
+  DOTNET_VERSION: '9.0.x'                      # Version .NET Core
 
 jobs:
-  build-and-upload:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: windows-latest  # Utilisez un agent Windows car l'API semble être dans un environnement Windows (PowerShell)
+
     steps:
-      - uses: actions/checkout@v3
-        # L'API se trouve à la racine du workspace dans ce repo
-        
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x' # Vérifiez votre version
-          
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
       - name: Restore dependencies
-        run: dotnet restore
-        working-directory: HexagonalAPI # Votre dossier API
-        
+        run: dotnet restore ./Backend/Hexagonal.sln
+
+      - name: Build
+        run: dotnet build ./Backend/Hexagonal.sln --configuration Release --no-restore
+
       - name: Publish API
-        run: dotnet publish --no-restore -c Release -o publish
-        working-directory: HexagonalAPI
-        
-      # Upload de l'artefact
-      - name: Upload API Artifact for Deployment
-        uses: actions/upload-artifact@v4 
+        run: dotnet publish ./Backend/Hexagonal/Hexagonal.csproj --configuration Release --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
         with:
-          app-name: 'Hexagon' 
-          package: '${{ github.workspace }}/publish_output'
-          
-      # 5. Déconnexion Azure (Bonne pratique)
-      - name: Logout from Azure
-        run: |
-          az logout
-        if: always()
+          # Vous devez configurer ce secret dans vos paramètres GitHub Actions
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} 
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
