@@ -3,7 +3,7 @@ name: Deploy .NET API to App Service
 on:
   push:
     branches:
-      - master # Se lance uniquement pour les pushes sur master
+      - master # Se lance uniquement pour les pushes sur master 
     # paths:
     #   - 'Hexagonal/**' # <--- CECI EST SUPPRIMÉ
     
