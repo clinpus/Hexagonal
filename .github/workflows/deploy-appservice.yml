@@ -3,7 +3,7 @@ name: Deploy API to Azure
 on:
   push:
     branches:
-      - main  # Déclenche le workflow à chaque push sur la branche 'main'
+      - master  # Déclenche le workflow à chaque push sur la branche 'main'
 
 env:
   AZURE_WEBAPP_NAME: srv-hexagon-prod    # Nom de votre Azure App Service
