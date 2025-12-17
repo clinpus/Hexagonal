@@ -10,7 +10,7 @@ namespace Application
         CustomerDto GetById(int id);
         IEnumerable<CustomerDto> GetAll();
         // U
-        void Update(int id, CustomerDto clientDto);
+        void Update(CustomerDto clientDto);
         // D
         void Delete(int id);
     }

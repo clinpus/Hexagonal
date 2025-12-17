@@ -64,25 +64,20 @@ namespace Hexagonal.Controllers
         // -------------------
         // U : UPDATE (Mettre à jour un client existant)
         // -------------------
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Put(int id, [FromBody] CustomerDto clientDto)
+        public IActionResult Put([FromBody] CustomerDto clientDto)
         {
-            if (id != clientDto.Id)
-            {
-                return BadRequest(new { message = "L'ID de l'URL ne correspond pas à l'ID de l'objet." });
-            }
-
             try
             {
-                _clientHandler.Update(id, clientDto);
+                _clientHandler.Update( clientDto);
                 return NoContent();
             }
             catch (InvalidOperationException)
             {
-                return NotFound(new { message = $"Customer avec ID {id} non trouvé pour la mise à jour." });
+                return NotFound(new { message = $"Customer avec ID {clientDto.Id} non trouvé pour la mise à jour." });
             }
             catch (Exception ex)
             {

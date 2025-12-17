@@ -7,6 +7,8 @@ namespace Domain
         // Ajout de la méthode de lecture (Port Sortant)
         Customer GetById(int id);
         IEnumerable<Customer> GetAll();
-        int Sauvegarder(Customer invoice);
+        int Create(Customer customer);
+        void Update(Customer customer);
+        bool Exists(int id);
     }
 }
