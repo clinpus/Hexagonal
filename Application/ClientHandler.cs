@@ -23,7 +23,7 @@ namespace Application
                                         clientDto.NumeroSiret
                                         );
 
-            return _repository.Sauvegarder(clt); 
+            return _repository.Create(clt); 
 
         }
 
@@ -45,9 +45,17 @@ namespace Application
             return clientDtos;
         }
 
-        public void Update(int id, CustomerDto clientDto)
+        public void Update(CustomerDto clientDto)
         {
-            throw new NotImplementedException();
+            Customer clt = Customer.Creer(
+                                        clientDto.Id,
+                                        clientDto.LastName,
+                                        clientDto.FirstName,
+                                        clientDto.Email,
+                                        clientDto.NumeroSiret
+                                        );
+
+            _repository.Update(clt);
         }
 
         CustomerDto ICustomerHandler.GetById(int id)

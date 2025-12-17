@@ -11,7 +11,7 @@ namespace Persistence
         public string FirstName { get;  set; }
         public string LastName { get;  set; }
         public string Adresse { get; set; }
-        public string Tel { get; private set; }
+        public string Tel { get; set; }
         public string Email { get; set; }
         public string NumeroSiret { get; set; }
 
